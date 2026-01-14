@@ -177,7 +177,7 @@ export default function MdlPreData({ changeVisibility }: Props) {
     let salto = 1;
 
     if (infoPallet.length > 0) {
-      salto = tmov === "I" && movSel != "03" ? 2 : 1;
+      salto = tmov === "I" && movSel != "04" ? 2 : 1;
 
       /*  const listArticulos = await ObtenerCantArticulos({
         numPallet: infoPallet[0],
@@ -222,7 +222,7 @@ export default function MdlPreData({ changeVisibility }: Props) {
   const obtenerDataPallet = async () => {
     const dataPallet = {
       numPallet: infoPallet[0],
-      iTmov: tmov + movSel === "I03" ? "S" : tmov,
+      iTmov: tmov + movSel === "I04" ? "S" : tmov,
       operacion: "dataPallet",
       articulo: infoArt ? infoArt.codigo : "",
     };
@@ -251,11 +251,11 @@ export default function MdlPreData({ changeVisibility }: Props) {
     const datos: detallePallet[] = peticion["dataItems"].map(
       (item: detallePallet) => {
         if (tmov === "S") {
-          if (movSel === "02")
+          if (movSel === "07" || movSel === "08" ||movSel === "05")
             return { ...item, referencia: infoRefer, visible: true };
 
           return { ...item, referencia: infoRefer };
-        } else if (tmov === "I" && movSel == "03") {
+        } else if (tmov === "I" && movSel == "04") {
           return { ...item, referencia: infoRefer, visible: true };
         }
         return item;
@@ -278,7 +278,7 @@ export default function MdlPreData({ changeVisibility }: Props) {
   useEffect(() => {
     if (step === 3 && otsDisp.length === 1) asignOt(otsDisp[0]);
     if (step === 4 && matrices.length === 1) asignMtz(matrices[0].codigo);
-    if (step === 4 && tmov + movSel === "I03") asignMtz("");
+    if (step === 4 && tmov + movSel === "I04") asignMtz("");
   }, [step]);
   return (
     <div className="fixed bg-gray-700 inset-1 bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10">

@@ -370,33 +370,6 @@ export default function FormGenerar() {
                   readOnly
                   step="1"
                   {...register("fechaReg", {
-                    onChange: (e) => {
-                      const valor = e.target.value; // Ej: "2025-10-31T10:45:15"
-
-                      const fecha = new Date(valor);
-
-                      // Aplica los segundos adicionales
-                      fecha.setSeconds(
-                        fecha.getSeconds() + parseInt(segundosRef.current)
-                      );
-
-                      // Ajuste para evitar el desfase de zona horaria (UTC-5)
-                      fecha.setHours(fecha.getHours() - 5);
-
-                      // Formatear la fecha correctamente sin perder la hora local
-                      const nuevaFecha = fecha
-                        .toISOString()
-                        .slice(0, 19)
-                        .replace("T", " ");
-
-                      // Muestra por consola
-                      console.log("Valor original:", valor);
-                      console.log("Fecha ajustada local:", nuevaFecha);
-                      // alert(nuevaFecha);
-
-                      // Actualiza el valor dentro del formulario
-                      setValue("fechaReg", nuevaFecha);
-                    },
                   })}
                 />
               </div>
@@ -596,7 +569,7 @@ export default function FormGenerar() {
               </button>
 
               {infoPallet.length === 0 ||
-                (infoPallet.length > 0 && tipoMov?.clase == "V" && (
+                (infoPallet.length > 0 && (tipoMov?.clase == "V" || tipoMov?.codigo==='S05')&& (
                   <button
                     type="button"
                     className="w-1/2 text-white text-center bg-orange-600 py-2 "
@@ -609,7 +582,7 @@ export default function FormGenerar() {
               {infoPallet.length === 0 ||
                 (infoPallet.length > 0 &&
                   tipoMov?.codigo.substring(0, 1) == "S" &&
-                  tipoMov.clase != "V" && (
+                  tipoMov.clase != "V" && tipoMov?.codigo!=='S05' && (
                     <button
                       type="button"
                       className="w-1/2 text-white text-center bg-orange-600 py-2 "

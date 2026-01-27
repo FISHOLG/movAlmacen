@@ -251,7 +251,7 @@ export default function MdlPreData({ changeVisibility }: Props) {
     const datos: detallePallet[] = peticion["dataItems"].map(
       (item: detallePallet) => {
         if (tmov === "S") {
-          if (movSel === "07" || movSel === "08" ||movSel === "05")
+          if (movSel === "07" || movSel === "08" ||movSel === "05"||movSel === "10")
             return { ...item, referencia: infoRefer, visible: true };
 
           return { ...item, referencia: infoRefer };

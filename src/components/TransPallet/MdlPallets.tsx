@@ -22,7 +22,7 @@ import {
 import { agruparPorArticulo } from "../../utils/agrupador";
 
 type Props = {
-  changeVisibility: Function;
+  changeVisibility: (valor:boolean)=>void;
 };
 
 type Form = {
@@ -81,15 +81,15 @@ export default function MdlPallets({ changeVisibility }: Props) {
     items: ItemPalletsMap[],
     pesoUnd: number
   ): dataItemTransP[] {
-    let resultado: dataItemTransP[] = [];
+    const resultado: dataItemTransP[] = [];
     const itemcopy = [...items]; // Sacamos una copia del arreglo original
 
     for (let i = 0; i < itemcopy.length; i++) {
       if (parseFloat(itemcopy[i].peso) === 0) continue; // SI EL ITEM ES PESO 0, SE OMITE
 
-      let itemActual = { ...itemcopy[i] }; //Creamos una copia del item actual
-      let pesoTotalActual = parseFloat(itemActual.peso); // Peso total que viene en el objeto
-      let adicionalActual = parseFloat(itemActual.adicional); // Adicional que viene en el objeto
+      const itemActual = { ...itemcopy[i] }; //Creamos una copia del item actual
+      const pesoTotalActual = parseFloat(itemActual.peso); // Peso total que viene en el objeto
+      const adicionalActual = parseFloat(itemActual.adicional); // Adicional que viene en el objeto
 
       // Asignamos el valor calculado de bultos y adicional
       itemActual.adicional = formatearNumero(adicionalActual);
@@ -142,12 +142,12 @@ export default function MdlPallets({ changeVisibility }: Props) {
           }
         }
 
-        let siguienteItem = { ...itemcopy[indice] };
-        let pesoSiguiente = parseFloat(siguienteItem.peso);
+        const siguienteItem = { ...itemcopy[indice] };
+        const pesoSiguiente = parseFloat(siguienteItem.peso);
 
         // Si el siguiente item tiene suficiente peso para cubrir el adicional
         if (pesoSiguiente >= pesoUnd - pesoAcumulado) {
-          let itemCombinado: dataItemTransP = {
+          const itemCombinado: dataItemTransP = {
             codArt: itemActual.codArt,
             lote: itemActual.lote + lotes + "|" + siguienteItem.lote,
             traza: itemActual.traza + trazas + "|" + siguienteItem.traza,
@@ -182,7 +182,7 @@ export default function MdlPallets({ changeVisibility }: Props) {
           itemcopy[indice] = siguienteItem;
         } else {
           // TEST
-          let itemSaldo: dataItemTransP = {
+          const itemSaldo: dataItemTransP = {
             codArt: itemActual.codArt,
             lote: itemActual.lote + lotes,
             traza: itemActual.traza + trazas,
@@ -200,7 +200,7 @@ export default function MdlPallets({ changeVisibility }: Props) {
           parseFloat(itemActual.peso) - parseFloat(itemActual.adicional)
         );
 
-        let itemCombinado: dataItemTransP = {
+        const itemCombinado: dataItemTransP = {
           codArt: itemActual.codArt,
           lote: itemActual.lote,
           traza: itemActual.traza,
@@ -221,8 +221,11 @@ export default function MdlPallets({ changeVisibility }: Props) {
 
     return resultado.filter((result) => result.peso !== "0.0000");
   }
+
   const formOrigen = async (data: Form) => {
+    console.log(data)
     const pallet = data["numPallet"].toUpperCase();
+    console.log(pallet)
     const verPallet = {
       numPallet: pallet,
       operacion: "verificar",

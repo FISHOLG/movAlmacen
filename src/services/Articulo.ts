@@ -25,4 +25,31 @@ const SearchArticulo = async (datos: formQr) => {
   }
 };
 
-export { SearchArticulo };
+const ObtenerCodigoArticulo = async (codigo:string) => {
+  try {
+    const url = `/api/articulo`;
+    const datosPost={
+      codigo,
+      operacion: 'obtenerCodigo',
+    }
+    const peticion = await Cliente.post(url, datosPost);
+    if (peticion.data.result && peticion.data.result === "error")
+      throw new Error(peticion.data.message);
+    return peticion.data;
+  } catch (error: any) {
+    let message = "";
+
+    if (error.response) {
+      message = error.response.data;
+    } else if (error.request) {
+      message = error.message;
+    } else {
+      message = error;
+    }
+
+    SetErrorLog(message.toString(), "BUSCAR ARTICULO");
+    return { result: "error", message: message.toString() };
+  }
+};
+
+export { SearchArticulo,ObtenerCodigoArticulo };

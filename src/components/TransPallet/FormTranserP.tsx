@@ -10,6 +10,7 @@ import { AuthStore } from "../../stores/AuthStore";
 import { TrasladarPallet } from "../../services/PalletService";
 import { useNavigate } from "react-router";
 import MdlMultEtiqueta from "./MdlMultEtiqueta";
+import { ObtenerCodigoArticulo } from "../../services/Articulo.ts";
 
 type formSearch = {
   qr: string;
@@ -124,21 +125,44 @@ export default function FormTranserP() {
     const dataQr = data.qr.split("|");
     //const ot = dataQr[1];
     //const fecha = formatearFecha(dataQr[2]);
-    const traza = dataQr[3];
-    const lote = dataQr[4];
+
 
     const codArti = dataQr[0];
-    const arrayArti = infoDet.find((obj) => obj[codArti]);
+    const obtenerCodigo=await ObtenerCodigoArticulo(codArti)
+
+    const codigoActual=obtenerCodigo.data
+
+    if(!codigoActual || codigoActual === ""){
+      await SwAlert.fire({
+        icon: "warning",
+        text: "NO SE HA ENCONTRADO ARTICULO",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+      setValueSearch("qr", "");
+      return;
+    }
+
+    const traza = dataQr[3];
+    const lote =  dataQr[4];
+
+    const arrayArti = infoDet.find((obj) => obj[codigoActual]);
+
     if (!arrayArti) return;
-    const items = arrayArti[codArti];
+    const items = arrayArti[codigoActual];
+
 
     let search: dataItemTransP[] = [];
 
     if (contEtiqueta === 1 && !saldo && items) {
+
       search = items.filter(
-        (info) => info.traza == traza && info.lote == lote  &&  parseFloat (info.peso )>0
+        (info) => info.traza == traza && info.lote == lote  &&  parseFloat (info.peso)>0
         //&& info.ot == ot
       );
+
+      console.log(lote);
+
     } else if (contEtiqueta > 1 && items) {
       search = items.filter(
         (info) =>

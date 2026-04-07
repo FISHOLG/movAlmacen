@@ -11,6 +11,7 @@ import { TrasladarPallet } from "../../services/PalletService";
 import { useNavigate } from "react-router";
 import MdlMultEtiqueta from "./MdlMultEtiqueta";
 import { ObtenerCodigoArticulo } from "../../services/Articulo.ts";
+import { DesencriptarCodigo } from "../../services/general.service.ts";
 
 type formSearch = {
   qr: string;
@@ -120,9 +121,35 @@ export default function FormTranserP() {
     }
   };
 
+  const desencriptarQRtext = async (textQr: string) => {
+    const partes = textQr.split("=");
+    const qrEncrypted = partes[0];
+
+    const desencriptado = await DesencriptarCodigo(qrEncrypted);
+
+    if (desencriptado.result !== "success") {
+      return false;
+    }
+    //console.log(desencriptado);
+    return desencriptado.qr;
+  };
+
+
   const submitSearch = async (data: formSearch) => {
     if (!infoDet) return;
-    const dataQr = data.qr.split("|");
+
+    const textQr=data.qr.trim()
+
+    const isEncrypted = textQr.includes("=");
+
+    let qrCode = textQr;
+
+    if (isEncrypted) {
+      qrCode = await desencriptarQRtext(textQr);
+    }
+
+
+    const dataQr = qrCode.split("|");
     //const ot = dataQr[1];
     //const fecha = formatearFecha(dataQr[2]);
 
@@ -148,7 +175,16 @@ export default function FormTranserP() {
 
     const arrayArti = infoDet.find((obj) => obj[codigoActual]);
 
-    if (!arrayArti) return;
+    if (!arrayArti) {
+      await SwAlert.fire({
+        icon:'warning',
+        text:'NO SE HA ENCONTRADO COINCIDENCIA',
+        showConfirmButton:false,
+        timer:2000
+      })
+      setValueSearch("qr", "");
+      return
+    };
     const items = arrayArti[codigoActual];
 
 

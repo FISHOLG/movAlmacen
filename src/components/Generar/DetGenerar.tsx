@@ -45,11 +45,16 @@ detalle) {
   const [bultos, setBultos] = useState(detalle["bultos"]);
   const [pesoItem, setPesoItem] = useState(detalle["peso"]);
   const [adicional, setAdicional] = useState(detalle["adicional"]);
+  const [traza, setTraza] = useState(detalle["traza"]);
   const [vMdlLote, setVMdlLote] = useState(false);
   const [lote, setLote] = useState(detalle["lote"]);
 
   const changebultos = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBultos(e.target.value);
+  };
+
+  const changeTraza = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTraza(e.target.value);
   };
 
   const changeAdicional = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +273,9 @@ detalle) {
                       {...field}
                       type="text"
                       className="h-6 w-full px-2 text-center text-xs md:text-base"
-                      readOnly
+                      //readOnly
+                      value={traza}
+                      onChange={changeTraza}
                     />
                   )}
                 />

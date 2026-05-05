@@ -49,6 +49,13 @@ detalle) {
   const [vMdlLote, setVMdlLote] = useState(false);
   const [lote, setLote] = useState(detalle["lote"]);
 
+  const bloqueo = infoPallet.length > 0 && tipoMov?.codigo.substring(0, 1) == "I"
+
+
+  /*infoPallet.length > 0 && tipoMov?.codigo.substring(0, 1) == "I"
+             ? "pointer-events-none	opacity-50"
+             : ""*/
+
   const changebultos = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBultos(e.target.value);
   };
@@ -148,11 +155,7 @@ detalle) {
           <FontAwesomeIcon icon={faTimes} />
         </button>
         <table
-          className={`w-full border-collapse border border-slate-400 ${
-            infoPallet.length > 0 && tipoMov?.codigo.substring(0, 1) == "I"
-              ? "pointer-events-none	opacity-50"
-              : ""
-          }`}
+          className={`w-full border-collapse border border-slate-400 `}
         >
           <tbody>
             <tr>
@@ -314,6 +317,7 @@ detalle) {
                   placeholder="# Bultos"
                   value={bultos}
                   onChange={changebultos}
+                  readOnly={bloqueo}
                 />
               </td>
               <td className="border border-slate-400 p-1">
@@ -333,7 +337,7 @@ detalle) {
                         {...field}
                         type="text"
                         className="h-6 w-full px-2 text-center text-xs md:text-base"
-                        readOnly={infoPallet.length === 0 ? false : true}
+                        readOnly={infoPallet.length !== 0}
                         value={lote}
                         onChange={changeLote}
                         onBlur={verificarLote}
@@ -374,6 +378,7 @@ detalle) {
                   placeholder="0.00"
                   value={adicional}
                   onChange={changeAdicional}
+                  readOnly={bloqueo}
                   /*  onKeyUp={() => actualizarPeso("adicional")}
                     onFocus={() =>
                       setUEdit({ campo: "adicional", index: index })

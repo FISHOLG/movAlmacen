@@ -13,7 +13,7 @@ type ScanQr = {
   codigo: string;
 };
 type Props = {
-  changeVisibility: Function;
+  changeVisibility: (valor:boolean)=>void
 };
 export default function ScanQr({ changeVisibility }: Props) {
   const { register, reset, handleSubmit, setFocus, setValue } =

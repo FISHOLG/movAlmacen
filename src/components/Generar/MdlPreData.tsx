@@ -275,12 +275,12 @@ export default function MdlPreData({ changeVisibility }: Props) {
     setDest(petAlm);
   };
 
-  useEffect(() => {
+   useEffect(() => {
     if (step === 3 && otsDisp.length === 1) asignOt(otsDisp[0]);
     if (step === 4 && matrices.length === 1) asignMtz(matrices[0].codigo);
-    if (step === 4 && (tmov + movSel === "I04" || tmov + movSel === "I10"))
-      asignMtz("");
+    if (step === 4 && tmov + movSel === "I04") asignMtz("");
   }, [step]);
+
   return (
     <div className="fixed bg-gray-700 inset-1 bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10">
       <motion.div
